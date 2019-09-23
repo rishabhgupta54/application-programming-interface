@@ -1,16 +1,18 @@
 <?php
+
 class Database
 {
-    private $databaseHostName = 'localhost';
-    private $databaseUserName = 'root';
-    private $databasePassword = 'rishabh';
-    private $databaseName = 'application-programming-interface';
+    protected $databaseHostName = 'localhost';
+    protected $databaseUserName = 'root';
+    protected $databasePassword = 'rishabh';
+    protected $databaseName = 'application-programming-interface';
+    protected $connection;
 
-    public function __construct()
+    protected function __construct()
     {
-        $connection = new mysqli($this->databaseHostName, $this->databaseUserName, $this->databasePassword, $this->databaseName);
-        if (empty($connection)) {
-            echo mysqli_error();
+        $this->connection = new mysqli($this->databaseHostName, $this->databaseUserName, $this->databasePassword, $this->databaseName);
+        if (empty($this->connection)) {
+            echo $this->connection->connect_error;
             exit();
         }
     }

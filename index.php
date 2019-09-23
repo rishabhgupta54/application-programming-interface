@@ -1,3 +1,4 @@
 <?php
-include_once './Database.php';
-$database = new Database();
+require_once './Employees.php';
+$employees = new Employees();
+$employees->getEmployees();
