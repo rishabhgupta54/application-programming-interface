@@ -20,7 +20,7 @@ class Employees extends Database
 
     public function setFirstName($firstName)
     {
-        $this->firstName[] = $firstName;
+        $this->firstName = $firstName;
     }
 
 
@@ -32,7 +32,7 @@ class Employees extends Database
 
     public function setLastName($lastName)
     {
-        $this->lastName[] = $lastName;
+        $this->lastName = $lastName;
     }
 
 
@@ -44,21 +44,33 @@ class Employees extends Database
 
     public function setDesignation($designation)
     {
-        $this->designation[] = $designation;
+        $this->designation = $designation;
     }
 
     public function getEmployees()
     {
         $getEmployeeQuery = 'SELECT * FROM employees';
         $result = $this->connection->query($getEmployeeQuery);
-
+        $employees = array();
         if ($result->num_rows > 0) {
-            while($row = $result->fetch_object()) {
-               $this->setFirstName($row->firstName);
-               $this->setLastName($row->lastName);
-               $this->setDesignation($row->designation);
+            $i = 0;
+            while ($row = $result->fetch_object()) {
+                $employees['employees'][$i]['firstName'] = $row->firstName;
+                $employees['employees'][$i]['lastName'] = $row->lastName;
+                $employees['employees'][$i]['designation'] = $row->designation;
+                $i++;
             }
         }
+        return json_encode($employees);
     }
 
+    public function newEmployee()
+    {
+        if (empty($this->getFirstName()) || $this->getLastName()) {
+            return 0;
+        }
+        $newEmployeeQuery = 'INSERT INTO employees SET firstName="' . $this->getFirstName() . '", lastName="' . $this->getLastName() . '", designation="' . $this->getDesignation() . '"';
+        $newEmployee = $this->connection->query($newEmployeeQuery) ? 1 : $this->connection->error;
+        return json_encode($newEmployee);
+    }
 }

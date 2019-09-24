@@ -1,4 +1,7 @@
 <?php
+header('Content-Type: application/json');
 require_once './Employees.php';
 $employees = new Employees();
-$employees->getEmployees();
+echo $employees->getEmployees();
+$employees->newEmployee();
+
