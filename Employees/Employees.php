@@ -1,6 +1,5 @@
 <?php
-require_once '../Config/Database.php';
-
+require_once  './Config/Database.php';
 class Employees extends Database
 {
     private $id;
