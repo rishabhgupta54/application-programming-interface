@@ -1,5 +1,5 @@
 <?php
-require_once './Database.php';
+require_once '../Config/Database.php';
 
 class Employees extends Database
 {
@@ -110,8 +110,17 @@ class Employees extends Database
         $updateEmployeeQuery = 'UPDATE employees SET ' . $updateParameters . ' WHERE id=' . $this->getId();
         $updateResults = $this->connection->query($updateEmployeeQuery) ? 1 : $this->connection->error;
         return json_encode($updateResults);
+    }
 
+    public function deleteEmployee()
+    {
+        if (empty($this->getId())) {
+            return 0;
+        }
 
+        $deleteEmployeeQuery = 'DELETE FROM employees WHERE id=' . $this->getId();
+        $deleteEmployee = $this->connection->query($deleteEmployeeQuery) ? 1 : $this->connection->error;
+        return json_encode($deleteEmployee);
     }
 
 }
