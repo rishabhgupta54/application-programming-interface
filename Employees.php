@@ -3,8 +3,20 @@ require_once './Database.php';
 
 class Employees extends Database
 {
+    private $id;
     private $firstName;
     private $lastName;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
     private $designation;
 
     public function __construct()
@@ -55,6 +67,7 @@ class Employees extends Database
         if ($result->num_rows > 0) {
             $i = 0;
             while ($row = $result->fetch_object()) {
+                $employees['employees'][$i]['id'] = $row->id;
                 $employees['employees'][$i]['firstName'] = $row->firstName;
                 $employees['employees'][$i]['lastName'] = $row->lastName;
                 $employees['employees'][$i]['designation'] = $row->designation;
@@ -73,4 +86,32 @@ class Employees extends Database
         $newEmployee = $this->connection->query($newEmployeeQuery) ? 1 : $this->connection->error;
         return json_encode($newEmployee);
     }
+
+    public function updateEmplyee()
+    {
+        if (empty($this->getId())) {
+            return 0;
+        }
+
+        $updateParameters = array();
+        if (!empty($this->getFirstName())) {
+            $updateParameters[] = 'firstName="' . $this->getFirstName() . '"';
+        }
+
+        if (!empty($this->getLastName())) {
+            $updateParameters[] = 'lastName="' . $this->getLastName() . '"';
+        }
+
+        if (!empty($this->getDesignation())) {
+            $updateParameters[] = 'designation="' . $this->getDesignation() . '"';
+        }
+
+        $updateParameters = implode(', ', $updateParameters);
+        $updateEmployeeQuery = 'UPDATE employees SET ' . $updateParameters . ' WHERE id=' . $this->getId();
+        $updateResults = $this->connection->query($updateEmployeeQuery) ? 1 : $this->connection->error;
+        return json_encode($updateResults);
+
+
+    }
+
 }
