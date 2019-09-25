@@ -78,9 +78,6 @@ class Employees extends Database
 
     public function newEmployee()
     {
-        if (empty($this->getFirstName()) || $this->getLastName()) {
-            return 0;
-        }
         $newEmployeeQuery = 'INSERT INTO employees SET firstName="' . $this->getFirstName() . '", lastName="' . $this->getLastName() . '", designation="' . $this->getDesignation() . '"';
         $newEmployee = $this->connection->query($newEmployeeQuery) ? 1 : $this->connection->error;
         return json_encode($newEmployee);

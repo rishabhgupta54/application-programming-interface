@@ -1,8 +1,19 @@
 <?php
 header('Content-Type: application/json');
 require_once './Employees/Employees.php';
+require_once './Permission/Permission.php';
+
+$postData = json_decode(file_get_contents('php://input'));
+$authentication = getallheaders()['authentication'];
+$permission = new Permission();
+$permission->setAuthentication($authentication);
+if ($permission->validateAuthentication() !== false) {
+    echo json_encode('{"error" : "Invalid Authentication"}');
+    die();
+}
 $employees = new Employees();
-/*$employees->getEmployees();
-$employees->newEmployee();
-$employees->updateEmplyee();
-$employees->deleteEmployee();*/
+$employees->setId($postData->id);
+$employees->setFirstName($postData->firstName);
+$employees->setLastName($postData->lastName);
+$employees->setDesignation($postData->designation);
+echo $employees->updateEmplyee();

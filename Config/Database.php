@@ -1,5 +1,6 @@
 <?php
 header('Content-Type: application/json');
+
 class Database
 {
     protected $databaseHostName = 'localhost';
